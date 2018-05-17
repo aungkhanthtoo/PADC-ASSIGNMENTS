@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Meditate</string>
+    <string name="title_home">Meditate</string>
+    <string name="title_dashboard">Me</string>
+    <string name="title_notifications">More</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello Series fragment</string>
+    <string name="search_view">Enter search</string>
+</resources>
