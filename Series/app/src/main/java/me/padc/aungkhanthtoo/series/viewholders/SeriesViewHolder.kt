@@ -14,10 +14,7 @@ import kotlinx.android.synthetic.main.series_item_view.view.*
 import kotlinx.android.synthetic.main.start_here_sub_item_view.view.*
 import me.padc.aungkhanthtoo.series.R
 import me.padc.aungkhanthtoo.series.adapters.SeriesAdapter
-import me.padc.aungkhanthtoo.series.utils.data.FooterItem
-import me.padc.aungkhanthtoo.series.utils.data.HeaderItem
-import me.padc.aungkhanthtoo.series.utils.data.Item
-import me.padc.aungkhanthtoo.series.utils.data.MidItem
+import me.padc.aungkhanthtoo.series.utils.data.*
 import me.padc.aungkhanthtoo.series.utils.inflate
 
 class SeriesViewHolder(view: View) :
@@ -26,19 +23,12 @@ class SeriesViewHolder(view: View) :
     val title: TextView = itemView.listItemTitle
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val image: ImageView = itemView.imageViewHeader
+
     }
 
     class MiddleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = itemView.middleItemImage
         val label: TextView = itemView.middleItemLabel
-    }
-
-    class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val backGroundView: ImageView = itemView.footerItemView
-        val iconView: ImageView = itemView.footerItemIcon
-        val firstText: TextView = itemView.footerText1
-        val secondText: TextView = itemView.footerText2
     }
 
     class ItemAdapter(val data: Item) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -50,7 +40,6 @@ class SeriesViewHolder(view: View) :
             return when (viewType) {
                 SeriesAdapter.HEADER -> HeaderViewHolder(parent.inflate(R.layout.start_here_sub_item_view))
                 SeriesAdapter.MIDDLE -> MiddleViewHolder(parent.inflate(R.layout.middle_item_view))
-                SeriesAdapter.FOOTER -> FooterViewHolder(parent.inflate(R.layout.footer_item_view))
                 else -> throw IllegalArgumentException(" Invalid View Type!")
             }
         }
@@ -61,13 +50,6 @@ class SeriesViewHolder(view: View) :
                 // Picasso.with(mContext).load(data.list[position].first).into(middleViewHolder.image)
                 Glide.with(mContext).load(data.list[position].first).into(middleViewHolder.image)
                 middleViewHolder.label.text = data.list[position].second
-            } else if (data is FooterItem) {
-                val footerViewHolder = holder as FooterViewHolder
-                footerViewHolder.iconView.setImageResource(data.list[position].icon)
-                Glide.with(mContext).load(data.list[position].background).into(footerViewHolder.backGroundView)
-                //footerViewHolder.backGroundView.setBackgroundResource(data.list[position].background)
-                footerViewHolder.firstText.text = data.list[position].first
-                footerViewHolder.secondText.text = data.list[position].second
             }
         }
 
@@ -77,6 +59,7 @@ class SeriesViewHolder(view: View) :
             is HeaderItem -> SeriesAdapter.HEADER
             is MidItem -> SeriesAdapter.MIDDLE
             is FooterItem -> SeriesAdapter.FOOTER
+            is TitleItem -> SeriesAdapter.TITLE
         }
     }
 

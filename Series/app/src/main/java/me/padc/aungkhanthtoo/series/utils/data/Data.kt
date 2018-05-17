@@ -8,9 +8,8 @@ sealed class Item{
 
 data class HeaderItem(val title: String, val list : List<Pair<Int, String>>, override val size: Int = list.size) : Item()
 data class MidItem(val title: String, val list : List<Pair<Int, String>>, override val size: Int = list.size) : Item()
-data class FooterItem(val title: String, val list : List<FooterPojo>, override val size: Int = list.size) : Item()
-
-data class FooterPojo(val icon: Int, val background: Int, val first: String, val second: String)
+data class TitleItem(val title: String, override val size: Int=0) : Item()
+data class FooterItem(val icon: Int, val background: Int, val first: String, val second: String, override val size: Int = 0) : Item()
 
 fun getHeaderData() = listOf(R.drawable.start to "Start Here")
 
@@ -24,16 +23,6 @@ fun getSleepData() = listOf(R.drawable.deep_sleep to "Deep Sleep", R.drawable.fl
 
 fun getPopularData() = listOf(R.drawable.start to "Simple Habit Starter", R.drawable.flower to "Staying Calm",  R.drawable.stones to "Release Blame",R.drawable.boat to "Public Speaking")
 
-fun getAllTopicData() = listOf(FooterPojo(R.drawable.ic_stars_black_24dp, R.drawable.basic, "Basic", "Learn meditation fundamentals"),
-        FooterPojo(R.drawable.ic_relax, R.drawable.relaxtwo, "Relax", "Unwind and relieve stress"),
-        FooterPojo(R.drawable.ic_sleep, R.drawable.sleep, "Sleep", "Rest effortlessly in deep sleep"),
-        FooterPojo(R.drawable.ic_focus, R.drawable.focus, "Focus", "Clear the mind for high performance"),
-        FooterPojo(R.drawable.ic_well_being, R.drawable.well, "Well-being", "Inspire joy, abundance, and purpose"),
-        FooterPojo(R.drawable.ic_resilience, R.drawable.trouble, "Resilience", "Face challenges with strength"),
-        FooterPojo(R.drawable.ic_health, R.drawable.healthy_lifestyle, "Health", "Care for your mind and body"),
-        FooterPojo(R.drawable.ic_relationship, R.drawable.relationship, "Relationships", "Maintain lasting connections"),
-        FooterPojo(R.drawable.ic_unguided, R.drawable.unguided, "Unguided", "Silence and nature sounds"))
-
 fun getData() = listOf(
         HeaderItem("Start Here", getHeaderData()),
         MidItem("Morning Meditations", getMorningData()),
@@ -41,5 +30,14 @@ fun getData() = listOf(
         MidItem("New on Simple Habit", getNewData()),
         MidItem("To Sleep Better", getSleepData()),
         MidItem("Most Popular", getPopularData()),
-        FooterItem("All Topics", getAllTopicData())
+        TitleItem("All Topics"),
+        FooterItem(R.drawable.ic_stars_black_24dp, R.drawable.basic, "Basic", "Learn meditation fundamentals"),
+        FooterItem(R.drawable.ic_relax, R.drawable.relaxtwo, "Relax", "Unwind and relieve stress"),
+        FooterItem(R.drawable.ic_sleep, R.drawable.sleep, "Sleep", "Rest effortlessly in deep sleep"),
+        FooterItem(R.drawable.ic_focus, R.drawable.focus, "Focus", "Clear the mind for high performance"),
+        FooterItem(R.drawable.ic_well_being, R.drawable.well, "Well-being", "Inspire joy, abundance, and purpose"),
+        FooterItem(R.drawable.ic_resilience, R.drawable.trouble, "Resilience", "Face challenges with strength"),
+        FooterItem(R.drawable.ic_health, R.drawable.healthy_lifestyle, "Health", "Care for your mind and body"),
+        FooterItem(R.drawable.ic_relationship, R.drawable.relationship, "Relationships", "Maintain lasting connections"),
+        FooterItem(R.drawable.ic_unguided, R.drawable.unguided, "Unguided", "Silence and nature sounds")
 )
