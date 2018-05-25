@@ -7,4 +7,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello Series fragment</string>
     <string name="search_view">Enter search</string>
+    <string name="current_day_streak">Current\n Day Streak</string>
+    <string name="total_minutes">Total\n Minutes</string>
+    <string name="total_sessions">Total\n Sessions</string>
+    <string name="progress">Progress</string>
+    <string name="unlimited_acess_sub_text">To the world\'s best teachers.</string>
+    <string name="unlimited_acess_label">Get Unlimited Access</string>
 </resources>

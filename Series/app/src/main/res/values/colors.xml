@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#212837</color>
     <color name="colorAccent">#90A4AE</color>
     <color name="colorTabIndicator">#90C4AE</color>
+    <color name="color_day_streak"> #7877A6</color>
+    <color name="color_total_session">#4CC0C4</color>
+    <color name="color_total_minutes">#72B3F0</color>
+    <color name="unlimited_color">#CE91A4</color>
 </resources>

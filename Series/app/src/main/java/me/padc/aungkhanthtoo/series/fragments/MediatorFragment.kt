@@ -12,8 +12,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_mediator.view.*
 import me.padc.aungkhanthtoo.series.R
 
-
-class MediatorFragment : Fragment() {
+class MediatorFragment : BaseFragment() {
 
 
     private var listener: OnFragmentInteractionListener? = null
@@ -38,7 +37,7 @@ class MediatorFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_mediator, container, false)
 
-        val pagerAdapter = PagerAdapter(activity?.supportFragmentManager!!)
+        val pagerAdapter = PagerAdapter(childFragmentManager)
         with(pagerAdapter) {
             addPage(BlankFragment(), "ON THE GO")
             addPage(SeriesFragment(), "SERIES")
@@ -47,6 +46,7 @@ class MediatorFragment : Fragment() {
         view.viewPager.adapter = pagerAdapter
 
         view.tabLayout.setupWithViewPager(view.viewPager)
+        view.tabLayout.getTabAt(1)?.select()
 
         return view
     }

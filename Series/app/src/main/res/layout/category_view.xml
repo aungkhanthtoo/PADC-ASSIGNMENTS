@@ -8,17 +8,17 @@
     android:layout_marginBottom="48dp">
 
     <TextView
-        android:id="@+id/listItemTitle"
+        android:id="@+id/categoryTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingEnd="16dp"
         android:paddingStart="8dp"
-        android:text="Start Here"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Start Here" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listItemRecycler"
@@ -26,9 +26,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:clipToPadding="false"
-        tools:listitem="@layout/start_here_sub_item_view"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:orientation="horizontal"
+        tools:listitem="@layout/category_item_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listItemTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryTitle" />
 
 </android.support.constraint.ConstraintLayout>

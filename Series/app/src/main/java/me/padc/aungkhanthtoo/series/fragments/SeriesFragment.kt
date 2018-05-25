@@ -3,24 +3,29 @@ package me.padc.aungkhanthtoo.series.fragments
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_series.view.*
 import me.padc.aungkhanthtoo.series.R
 import me.padc.aungkhanthtoo.series.adapters.SeriesAdapter
-import me.padc.aungkhanthtoo.series.utils.data.getData
+import me.padc.aungkhanthtoo.series.data.SeriesModel
+import me.padc.aungkhanthtoo.series.events.ApiEvents
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class SeriesFragment : Fragment() {
+class SeriesFragment : BaseFragment() {
 
     private var param1: String? = null
     private var param2: String? = null
     private var listener: MediatorFragment.OnFragmentInteractionListener? = null
+    private val mAdapter = SeriesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +42,31 @@ class SeriesFragment : Fragment() {
 
         with(view.recycler){
             layoutManager = LinearLayoutManager(SeriesFragment@this.context)
+            adapter = mAdapter
             hasFixedSize()
-            adapter = SeriesAdapter(getData())
         }
+
         return view
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    fun onDataLoaded(event: ApiEvents.SuccessfulDataLoaded){
+        d("SeriesFragment", "Data Loaded Event is received.")
+        mAdapter.setNewItems(event.newData)
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+        if (SeriesModel.mDataSource.isNotEmpty()) {
+            mAdapter.setNewItems(SeriesModel.mDataSource)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     fun onButtonPressed(uri: Uri) {

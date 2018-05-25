@@ -1,10 +1,20 @@
 package me.padc.aungkhanthtoo.series.viewholders
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import kotlinx.android.synthetic.main.title_item_view.view.*
+import me.padc.aungkhanthtoo.series.data.vo.TitleVO
 
-class TitleViewHolder(view: View) : RecyclerView.ViewHolder(view){
-    val title : TextView = itemView.listItemTitle
+class TitleViewHolder(view: View) : BaseViewHolder<TitleVO>(view){
+
+    private val title : TextView = itemView.listItemTitle
+
+    override fun setData(data: TitleVO) {
+        title.text = data.title
+    }
+
+    override fun onClick(v: View) {
+
+    }
+
 }

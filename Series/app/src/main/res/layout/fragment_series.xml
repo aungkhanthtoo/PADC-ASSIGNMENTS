@@ -6,7 +6,7 @@
     android:clipToPadding="false"
     android:id="@+id/recycler"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:listitem="@layout/middle_item_view"
+    tools:listitem="@layout/category_item_view"
     android:background="@color/colorPrimaryDark"
     android:paddingTop="8dp"
     />
