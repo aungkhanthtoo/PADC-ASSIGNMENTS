@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#373F4E</color>
     <color name="colorPrimaryDark">#212837</color>
-    <color name="colorAccent">#90A4AE</color>
+    <color name="colorAccent">@color/colorTabIndicator</color>
+    <color name="colorSessionText">#90A4AE</color>
     <color name="colorTabIndicator">#90C4AE</color>
     <color name="color_day_streak"> #7877A6</color>
     <color name="color_total_session">#4CC0C4</color>

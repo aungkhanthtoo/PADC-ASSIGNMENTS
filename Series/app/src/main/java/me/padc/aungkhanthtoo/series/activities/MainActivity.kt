@@ -1,25 +1,27 @@
 package me.padc.aungkhanthtoo.series.activities
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.util.Log.d
-import android.util.Log.e
 import android.view.Menu
-import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import me.padc.aungkhanthtoo.series.fragments.MediatorFragment
 import me.padc.aungkhanthtoo.series.R
 import me.padc.aungkhanthtoo.series.data.SeriesModel
+import me.padc.aungkhanthtoo.series.delegates.CategoryProgramDelegate
+import me.padc.aungkhanthtoo.series.delegates.MeMediateDelegate
+import me.padc.aungkhanthtoo.series.delegates.CurrentProgramDelegate
 import me.padc.aungkhanthtoo.series.events.ApiEvents
 import me.padc.aungkhanthtoo.series.fragments.MeFragment
+import me.padc.aungkhanthtoo.series.utils.SERVER_CAN_T_CONNECT
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.intentFor
 
 class MainActivity : BaseActivity(),
-        MediatorFragment.OnFragmentInteractionListener {
+        MeMediateDelegate, CurrentProgramDelegate, CategoryProgramDelegate {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -43,6 +45,15 @@ class MainActivity : BaseActivity(),
         false
     }
 
+    override fun setScreenTitle(title: String) {
+        supportActionBar?.title = title
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -54,24 +65,34 @@ class MainActivity : BaseActivity(),
 
         val bool1 = EventBus.getDefault().hasSubscriberForEvent(ApiEvents.ErrorInvokingAPI::class.java)
         val bool2 = EventBus.getDefault().hasSubscriberForEvent(ApiEvents.SuccessfulDataLoaded::class.java)
-        d("MainActivity", "$bool1 : $bool2")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onError(event: ApiEvents.ErrorInvokingAPI){
-        e("MainActivity", "Error event ${event.message}")
+    fun onError(event: ApiEvents.ErrorInvokingAPI) {
         EventBus.getDefault().removeStickyEvent(ApiEvents.ErrorInvokingAPI::class.java)
-        longSnackbar(findViewById<View>(R.id.container)!!, "Can't connect to Server", "Try Again"){
-            SeriesModel.loadSeriesData()
+        if (event.status == SERVER_CAN_T_CONNECT) {
+            longSnackbar(findViewById(R.id.container)!!, "Can't connect to Server", "Try Again") {
+                SeriesModel.loadSeriesData()
+            }
         }
-    }
-
-    override fun onFragmentInteraction(uri: Uri) {
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
+
+    override fun onTapProgramItem(position: Int) {
+        startActivity(intentFor<ProgramDetailActivity>(ProgramDetailActivity.POSITION to position))
+    }
+
+    override fun onTapCategoryProgramItem(position: Int, categoryPosition: Int) {
+        startActivity(intentFor<ProgramDetailActivity>(ProgramDetailActivity.POSITION to position, ProgramDetailActivity.CATEGORY_POSITION to categoryPosition))
+    }
+
 }

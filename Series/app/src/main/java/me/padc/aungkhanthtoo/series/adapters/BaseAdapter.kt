@@ -1,9 +1,10 @@
 package me.padc.aungkhanthtoo.series.adapters
 
 import android.support.v7.widget.RecyclerView
+import me.padc.aungkhanthtoo.series.data.vo.BaseVO
 import me.padc.aungkhanthtoo.series.viewholders.BaseViewHolder
 
-abstract class BaseAdapter<T : RecyclerView.ViewHolder, W> : RecyclerView.Adapter<T>() {
+abstract class BaseAdapter<T : BaseViewHolder<out BaseVO>, W> : RecyclerView.Adapter<T>() {
 
     protected var mData: MutableList<W> = ArrayList()
 
@@ -26,7 +27,7 @@ abstract class BaseAdapter<T : RecyclerView.ViewHolder, W> : RecyclerView.Adapte
     }
 
     fun getItemAt(position: Int) =
-            if (position < mData.size) {
+            if (position in 0 until mData.size) {
                 mData[position]
             } else {
                 null
@@ -36,7 +37,7 @@ abstract class BaseAdapter<T : RecyclerView.ViewHolder, W> : RecyclerView.Adapte
 
     fun addNewItem(data: W) {
         mData.add(data)
-        notifyItemInserted(mData.size - 1)
+        notifyItemInserted(mData.lastIndex)
     }
 
     fun removeItem(data: W) {

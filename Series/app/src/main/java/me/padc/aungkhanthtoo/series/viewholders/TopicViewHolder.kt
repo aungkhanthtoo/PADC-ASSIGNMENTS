@@ -6,6 +6,8 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.topic_item_view.view.*
 import me.padc.aungkhanthtoo.series.data.vo.TopicVO
+import me.padc.aungkhanthtoo.series.delegates.CurrentProgramDelegate
+import me.padc.aungkhanthtoo.series.utils.data.getRandomTopicPics
 import me.padc.aungkhanthtoo.series.utils.data.getTopicPics
 
 class TopicViewHolder(itemView: View) : BaseViewHolder<TopicVO>(itemView) {
@@ -16,12 +18,8 @@ class TopicViewHolder(itemView: View) : BaseViewHolder<TopicVO>(itemView) {
     private val secondText: TextView = itemView.subLabel
 
     override fun setData(data: TopicVO) {
-
-    }
-
-    fun setDataWithPosition(data: TopicVO, position: Int) {
-        Glide.with(itemView.context).load(getTopicPics()[position % getTopicPics().size].second).into(backGroundView)
-        iconView.setImageResource(getTopicPics()[position % getTopicPics().size].first)
+        Glide.with(context).load(getTopicPics()[adapterPosition % getTopicPics().size].second).into(backGroundView)
+        iconView.setImageResource(getTopicPics()[adapterPosition % getTopicPics().size].first)
         firstText.text = data.topicName
         secondText.text = data.topicDesc
     }

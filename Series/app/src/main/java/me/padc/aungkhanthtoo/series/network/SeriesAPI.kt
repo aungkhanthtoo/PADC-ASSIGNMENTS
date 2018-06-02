@@ -4,9 +4,7 @@ import me.padc.aungkhanthtoo.series.network.responses.GetCategoriesProgramsRespo
 import me.padc.aungkhanthtoo.series.network.responses.GetCurrentProgramResponse
 import me.padc.aungkhanthtoo.series.network.responses.GetTopicsResponse
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface SeriesAPI {
 
@@ -30,5 +28,5 @@ interface SeriesAPI {
             @Field("page") page: Int,
             @Field("access_token") accessToken: String
     ): Call<GetCategoriesProgramsResponse>
-
+    
 }

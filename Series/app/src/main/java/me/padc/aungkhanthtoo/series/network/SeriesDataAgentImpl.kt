@@ -36,6 +36,7 @@ object SeriesDataAgentImpl : SeriesDataAgent {
     }
 
     override fun loadSeriesData(accessToken: String, pageNo: Int) {
+
         val callTopics = mAPI.loadTopics(pageNo, accessToken)
         val callCategory = mAPI.loadCategories(pageNo, accessToken)
         val callCurrentProgram = mAPI.loadCurrentProgram(pageNo, accessToken)
@@ -55,13 +56,14 @@ object SeriesDataAgentImpl : SeriesDataAgent {
                                     categoryResponse?.categoriesPrograms?.isNotEmpty() == true &&
                                     topicResponse?.topics?.isNotEmpty() == true) {
                                 d("SeriesDataAgentImpl", "currentProgram ${programResponse.currentProgram}\ncategory ${categoryResponse.categoriesPrograms}\ntopics ${topicResponse.topics}")
-                                EventBus.getDefault().post(ApiEvents.SuccessfulDataLoaded(
-                                        categoryResponse.page?.toInt() ?: 1,
-                                        getAllData(listOf(TitleVO("Start Here")),
-                                                listOf(programResponse.currentProgram),
-                                                categoryResponse.categoriesPrograms,
-                                                listOf(TitleVO("All Topics")),
-                                                topicResponse.topics)))
+                                EventBus.getDefault().post(
+                                        ApiEvents.SuccessfulDataLoaded(
+                                                categoryResponse.page?.toInt() ?: 1,
+                                                getAllData(listOf(TitleVO("Start Here")),
+                                                        listOf(programResponse.currentProgram),
+                                                        categoryResponse.categoriesPrograms,
+                                                        listOf(TitleVO("All Topics")),
+                                                        topicResponse.topics)))
                             } else {
                                 EventBus.getDefault().post(ApiEvents.ErrorInvokingAPI("No data could be loaded for Now. Please try again later.", SERVER_NO_DATA))
                             }

@@ -1,6 +1,7 @@
 package me.padc.aungkhanthtoo.series.fragments
 
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_me.view.*
 
 import me.padc.aungkhanthtoo.series.R
+import me.padc.aungkhanthtoo.series.delegates.MeMediateDelegate
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +22,27 @@ private const val ARG_PARAM2 = "param2"
  *
  */
 class MeFragment : Fragment() {
+
+    private var mDelegate: MeMediateDelegate? = null
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is MeMediateDelegate) {
+            mDelegate = context
+        }else{
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mDelegate = null
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mDelegate?.setScreenTitle(getString(R.string.me_title))
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,8 +57,5 @@ class MeFragment : Fragment() {
 
         return view
     }
-
-
-
 
 }

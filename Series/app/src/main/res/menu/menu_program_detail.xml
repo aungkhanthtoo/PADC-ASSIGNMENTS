@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="me.padc.aungkhanthtoo.series.activities.ProgramDetailActivity">
+    <item
+        android:id="@+id/action_add"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/action_add"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:orderInCategory="200"
+        android:title="@string/action_share"
+        app:showAsAction="ifRoom" />
+</menu>

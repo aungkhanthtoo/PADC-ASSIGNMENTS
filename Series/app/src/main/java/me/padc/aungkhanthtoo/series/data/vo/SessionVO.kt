@@ -17,4 +17,4 @@ data class SessionVO (
     @SerializedName("file-path")
     val filePath: String
 
-)
+): BaseVO()
