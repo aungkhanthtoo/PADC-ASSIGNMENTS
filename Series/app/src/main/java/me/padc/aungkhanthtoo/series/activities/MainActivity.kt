@@ -3,7 +3,6 @@ package me.padc.aungkhanthtoo.series.activities
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.view.Menu
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import me.padc.aungkhanthtoo.series.fragments.MediatorFragment
 import me.padc.aungkhanthtoo.series.R
@@ -22,6 +21,14 @@ import org.jetbrains.anko.intentFor
 
 class MainActivity : BaseActivity(),
         MeMediateDelegate, CurrentProgramDelegate, CategoryProgramDelegate {
+
+    override fun onTapCategoryProgramItem(programId: String, categoryId: String) {
+        startActivity(ProgramDetailActivity.newIntentCategoryProgram(applicationContext, programId, categoryId))
+    }
+
+    override fun onTapCurrentProgram() {
+        startActivity(ProgramDetailActivity.newIntentCurrentProgram(applicationContext))
+    }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -85,14 +92,6 @@ class MainActivity : BaseActivity(),
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
-    }
-
-    override fun onTapProgramItem(position: Int) {
-        startActivity(intentFor<ProgramDetailActivity>(ProgramDetailActivity.POSITION to position))
-    }
-
-    override fun onTapCategoryProgramItem(position: Int, categoryPosition: Int) {
-        startActivity(intentFor<ProgramDetailActivity>(ProgramDetailActivity.POSITION to position, ProgramDetailActivity.CATEGORY_POSITION to categoryPosition))
     }
 
 }

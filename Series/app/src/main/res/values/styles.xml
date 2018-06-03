@@ -10,6 +10,12 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!-- MainActivity theme. -->
+    <style name="AppTheme.MainActivity" />
+
+    <!-- Detail theme. -->
+    <style name="DetailActivity" parent="AppTheme.NoActionBar" />
+
     <!-- App Bar Style -->
     <style name="AppBarStyle" parent="Widget.AppCompat.ActionBar.Solid">
         <!-- Remove the shadow below the app bar -->

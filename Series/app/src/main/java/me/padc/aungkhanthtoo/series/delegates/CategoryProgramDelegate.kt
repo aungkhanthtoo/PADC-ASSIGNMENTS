@@ -1,6 +1,8 @@
 package me.padc.aungkhanthtoo.series.delegates
 
+import android.widget.ImageView
+
 interface CategoryProgramDelegate {
 
-    fun onTapCategoryProgramItem(position: Int, categoryPosition: Int)
+    fun onTapCategoryProgramItem(programId: String, categoryId: String)
 }

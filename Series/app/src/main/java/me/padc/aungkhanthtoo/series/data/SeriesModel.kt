@@ -16,9 +16,7 @@ import org.greenrobot.eventbus.ThreadMode
 object SeriesModel {
 
     private var mPageIndex = 1
-    val mDataSource: MutableList<BaseVO> by lazy {
-        ArrayList<BaseVO>()
-    }
+    val mDataSource: MutableList<BaseVO> by lazy { ArrayList<BaseVO>() }
 
     init {
         EventBus.getDefault().register(this)
@@ -28,12 +26,26 @@ object SeriesModel {
         SeriesDataAgentImpl.loadSeriesData(ACCESS_TOKEN, mPageIndex)
     }
 
-    val currentProgram: CurrentProgramVO
-        get() = mDataSource[1] as CurrentProgramVO
+    fun getCurrentProgram(): CurrentProgramVO? {
+        for (baseVO in mDataSource) {
+            if (baseVO is CurrentProgramVO) {
+                return baseVO
+            }
+        }
+        return null
+    }
 
-    fun getCategoryProgram(position: Int, categoryPosition: Int): ProgramVO{
-        val category = mDataSource[categoryPosition] as CategoryVO
-        return category.programs[position]
+    fun getCategoryProgram(categoryId: String, programId: String): ProgramVO? {
+        for (baseVO in mDataSource) {
+            if (baseVO is CategoryVO && categoryId == baseVO.categoryId) {
+                for (programVO in baseVO.programs) {
+                    if (programId == programVO.programId) {
+                        return programVO
+                    }
+                }
+            }
+        }
+        return null
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)

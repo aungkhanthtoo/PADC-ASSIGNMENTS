@@ -6,8 +6,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.topic_item_view.view.*
 import me.padc.aungkhanthtoo.series.data.vo.TopicVO
-import me.padc.aungkhanthtoo.series.delegates.CurrentProgramDelegate
-import me.padc.aungkhanthtoo.series.utils.data.getRandomTopicPics
 import me.padc.aungkhanthtoo.series.utils.data.getTopicPics
 
 class TopicViewHolder(itemView: View) : BaseViewHolder<TopicVO>(itemView) {

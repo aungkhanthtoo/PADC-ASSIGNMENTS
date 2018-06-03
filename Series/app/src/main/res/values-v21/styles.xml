@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarStyle">@style/AppBarStyle</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
+    <!-- MainActivity theme. -->
+    <style name="AppTheme.MainActivity">
+        <item name="android:windowSharedElementExitTransition">@transition/program_transition</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/program_transition</item>
+    </style>
+
+    <!-- Detail theme. -->
+    <style name="DetailActivity" parent="AppTheme.NoActionBar">
+        <item name="android:windowSharedElementEnterTransition">@transition/program_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/program_transition</item>
+    </style>
+
+</resources>

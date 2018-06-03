@@ -59,7 +59,6 @@ class SeriesFragment : BaseFragment() {
         mAdapter.setNewItems(event.newData)
     }
 
-
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
@@ -73,9 +72,9 @@ class SeriesFragment : BaseFragment() {
         EventBus.getDefault().unregister(this)
     }
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         if (context is CurrentProgramDelegate) {
             mDelegate = context
         } else {
@@ -86,16 +85,12 @@ class SeriesFragment : BaseFragment() {
         } else {
             throw RuntimeException(context.toString() + " must implement CategoryProgramDelegate")
         }
+
     }
 
     override fun onDetach() {
         super.onDetach()
         mDelegate = null
-    }
-
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {
@@ -108,4 +103,5 @@ class SeriesFragment : BaseFragment() {
                     }
                 }
     }
+
 }
