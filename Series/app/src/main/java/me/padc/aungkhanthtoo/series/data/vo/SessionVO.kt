@@ -1,20 +1,37 @@
 package me.padc.aungkhanthtoo.series.data.vo
 
+import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "Sessions",
+        foreignKeys = [(ForeignKey(entity = CurrentProgramVO::class,
+                childColumns = ["program-id"],
+                parentColumns = ["program-id"],
+                onDelete = ForeignKey.CASCADE)),
+            (ForeignKey(entity = ProgramVO::class,
+                    childColumns = ["program-id"],
+                    parentColumns = ["program-id"],
+                    onDelete = ForeignKey.CASCADE))],
+        indices = [(Index(value = ["session-id"], unique = true))])
+data class SessionVO(
 
-data class SessionVO (
+        @PrimaryKey(autoGenerate = true)
+        val id: Int,
 
-    @SerializedName("session-id")
-    val sessionId: String,
+        @ColumnInfo(name = "program-id")
+        val currentProgramId: String,
 
-    @SerializedName("title")
-    val title: String,
+        @ColumnInfo(name = "session-id")
+        @SerializedName("session-id")
+        val sessionId: String,
 
-    @SerializedName("length-in-seconds")
-    val lengthInSeconds: Int,
+        @SerializedName("title")
+        val title: String,
 
-    @SerializedName("file-path")
-    val filePath: String
+        @SerializedName("length-in-seconds")
+        val lengthInSeconds: Int,
 
-): BaseVO()
+        @SerializedName("file-path")
+        val filePath: String
+
+) : BaseVO()

@@ -4,35 +4,37 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_series.view.*
 import me.padc.aungkhanthtoo.series.R
+import me.padc.aungkhanthtoo.series.activities.ProgramDetailActivity
 import me.padc.aungkhanthtoo.series.adapters.SeriesAdapter
 import me.padc.aungkhanthtoo.series.data.SeriesModel
-import me.padc.aungkhanthtoo.series.delegates.CategoryProgramDelegate
-import me.padc.aungkhanthtoo.series.delegates.CurrentProgramDelegate
-import me.padc.aungkhanthtoo.series.events.ApiEvents
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import me.padc.aungkhanthtoo.series.data.vo.BaseVO
+import me.padc.aungkhanthtoo.series.mvp.presenters.SeriesListPresenter
+import me.padc.aungkhanthtoo.series.mvp.views.SeriesListView
+import org.jetbrains.anko.design.longSnackbar
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class SeriesFragment : BaseFragment() {
-
-    private var mDelegate: CurrentProgramDelegate? = null
-    private var mCategoryDelgate: CategoryProgramDelegate? = null
+class SeriesFragment : BaseFragment(), SeriesListView {
 
     private var param1: String? = null
     private var param2: String? = null
-    private val mAdapter by lazy { SeriesAdapter(mDelegate!!, mCategoryDelgate!!) }
+    private lateinit var mPresenter: SeriesListPresenter
+    private lateinit var rvSeries: RecyclerView
+    private val mAdapter by lazy { SeriesAdapter(mPresenter) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mPresenter = SeriesListPresenter(this)
+        mPresenter.onCreate()
+
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -43,8 +45,8 @@ class SeriesFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_series, container, false)
-
-        with(view.recycler) {
+        rvSeries = view.recycler
+        with(rvSeries) {
             layoutManager = LinearLayoutManager(SeriesFragment@ this.context)
             adapter = mAdapter
             hasFixedSize()
@@ -53,44 +55,33 @@ class SeriesFragment : BaseFragment() {
         return view
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    fun onDataLoaded(event: ApiEvents.SuccessfulDataLoaded) {
-        d("SeriesFragment", "Data Loaded Event is received.")
-        mAdapter.setNewItems(event.newData)
+    override fun showSeriesList(data: List<BaseVO>) {
+        mAdapter.appendNewItems(data)
+    }
+
+    override fun showErrorMsg(msg: String) {
+        longSnackbar(rvSeries, msg, "Try Again") {
+            SeriesModel.loadSeriesData()
+        }
+    }
+
+    override fun showCurrentProgramDetail() {
+        startActivity(ProgramDetailActivity.newIntentCurrentProgram(context!!))
+    }
+
+    override fun showCategoryProgramDetail(programId: String, categoryId: String) {
+        startActivity(ProgramDetailActivity.newIntentCategoryProgram(context!!, programId, categoryId))
     }
 
     override fun onStart() {
         super.onStart()
-        EventBus.getDefault().register(this)
-        if (SeriesModel.mDataSource.isNotEmpty()) {
-            mAdapter.setNewItems(SeriesModel.mDataSource)
-        }
+        mPresenter.onStart()
+        mPresenter.onLoadPersistenceData(mAdapter.getItems().isEmpty())
     }
 
     override fun onStop() {
         super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        if (context is CurrentProgramDelegate) {
-            mDelegate = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement CurrentProgramDelegate")
-        }
-        if (context is CategoryProgramDelegate) {
-            mCategoryDelgate = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement CategoryProgramDelegate")
-        }
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mDelegate = null
+        mPresenter.onStop()
     }
 
     companion object {

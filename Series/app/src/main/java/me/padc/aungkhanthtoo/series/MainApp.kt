@@ -7,7 +7,6 @@ class MainApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        SeriesModel.loadSeriesData()
     }
 
 }

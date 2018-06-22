@@ -1,19 +1,28 @@
 package me.padc.aungkhanthtoo.series.data.vo
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
+import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-data class TopicVO (
+@Entity(tableName = "Topics", indices = [Index("topic-name")])
+data class TopicVO(
 
-    @SerializedName("topic-name")
-    val topicName: String,
+        @PrimaryKey(autoGenerate = true)
+        val id: Int,
 
-    @SerializedName("topic-desc")
-    val topicDesc: String,
+        @ColumnInfo(name = "topic-name")
+        @SerializedName("topic-name")
+        val topicName: String,
 
-    @SerializedName("icon")
-    val icon: String,
+        @SerializedName("topic-desc")
+        val topicDesc: String,
 
-    @SerializedName("background")
-    val background: String
+        @SerializedName("icon")
+        val icon: String,
 
-): BaseVO()
+        @SerializedName("background")
+        val background: String
+
+) : BaseVO()

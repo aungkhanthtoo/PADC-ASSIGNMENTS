@@ -10,25 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_mediator.view.*
 import me.padc.aungkhanthtoo.series.R
+import me.padc.aungkhanthtoo.series.activities.MainActivity
 import me.padc.aungkhanthtoo.series.delegates.MeMediateDelegate
 
 class MediatorFragment : BaseFragment(){
-
-    private var mDelegate: MeMediateDelegate? = null
 
     companion object {
         @JvmStatic
         fun newInstance(): MediatorFragment {
             return MediatorFragment()
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is MeMediateDelegate) {
-            mDelegate = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
     }
 
@@ -60,13 +50,8 @@ class MediatorFragment : BaseFragment(){
 
     override fun onStart() {
         super.onStart()
-        mDelegate?.setScreenTitle(getString(R.string.mediate_title))
-    }
-
-
-    override fun onDetach() {
-        super.onDetach()
-        mDelegate = null
+        val mainActivity = activity as? MainActivity
+        mainActivity?.supportActionBar?.title = getString(R.string.mediate_title)
     }
 
     class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

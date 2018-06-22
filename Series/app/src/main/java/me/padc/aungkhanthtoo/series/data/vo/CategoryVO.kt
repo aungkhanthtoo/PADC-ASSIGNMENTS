@@ -1,16 +1,23 @@
 package me.padc.aungkhanthtoo.series.data.vo
 
+import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
 
-data class CategoryVO (
+@Entity(tableName = "Categories", indices = [(Index(value = ["category-id"], unique = true))])
+data class CategoryVO(
 
-    @SerializedName("category-id")
-    val categoryId: String,
+        @PrimaryKey(autoGenerate = true)
+        val id: Int,
 
-    @SerializedName("title")
-    val title: String,
+        @ColumnInfo(name = "category-id")
+        @SerializedName("category-id")
+        val categoryId: String,
 
-    @SerializedName("programs")
-    val programs: List<ProgramVO>
+        @SerializedName("title")
+        val title: String,
 
-): BaseVO()
+        @Ignore
+        @SerializedName("programs")
+        val programs: List<ProgramVO>
+
+) : BaseVO()

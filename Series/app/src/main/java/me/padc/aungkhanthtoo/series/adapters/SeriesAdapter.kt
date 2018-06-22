@@ -5,15 +5,16 @@ import me.padc.aungkhanthtoo.series.R
 import me.padc.aungkhanthtoo.series.data.vo.*
 import me.padc.aungkhanthtoo.series.delegates.CategoryProgramDelegate
 import me.padc.aungkhanthtoo.series.delegates.CurrentProgramDelegate
+import me.padc.aungkhanthtoo.series.mvp.presenters.SeriesListPresenter
 import me.padc.aungkhanthtoo.series.utils.inflate
 import me.padc.aungkhanthtoo.series.viewholders.*
 
-class SeriesAdapter(private val mDelegate: CurrentProgramDelegate, private val mCateDelegate: CategoryProgramDelegate) : BaseAdapter<BaseViewHolder<out BaseVO>, BaseVO>() {
+class SeriesAdapter(private val mDelegate: SeriesListPresenter) : BaseAdapter<BaseViewHolder<out BaseVO>, BaseVO>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<out BaseVO> {
         return when (viewType) {
             HEADER -> CurrentProgramViewHolder(parent.inflate(R.layout.current_program_item_view), mDelegate)
-            MIDDLE -> CategoryViewHolder(parent.inflate(R.layout.category_view), mCateDelegate)
+            MIDDLE -> CategoryViewHolder(parent.inflate(R.layout.category_view), mDelegate)
             TITLE -> TitleViewHolder(parent.inflate(R.layout.title_item_view))
             FOOTER -> TopicViewHolder(parent.inflate(R.layout.topic_item_view))
             else -> throw IllegalArgumentException("Invalid View Type!")

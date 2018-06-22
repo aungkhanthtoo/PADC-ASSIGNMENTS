@@ -2,6 +2,7 @@ package me.padc.aungkhanthtoo.series.activities
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.content.ContextCompat.startActivity
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import me.padc.aungkhanthtoo.series.fragments.MediatorFragment
@@ -12,81 +13,62 @@ import me.padc.aungkhanthtoo.series.delegates.MeMediateDelegate
 import me.padc.aungkhanthtoo.series.delegates.CurrentProgramDelegate
 import me.padc.aungkhanthtoo.series.events.ApiEvents
 import me.padc.aungkhanthtoo.series.fragments.MeFragment
+import me.padc.aungkhanthtoo.series.mvp.presenters.MainActivityPresenter
+import me.padc.aungkhanthtoo.series.mvp.views.MainActivityView
 import me.padc.aungkhanthtoo.series.utils.SERVER_CAN_T_CONNECT
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.intentFor
 
 class MainActivity : BaseActivity(),
-        MeMediateDelegate, CurrentProgramDelegate, CategoryProgramDelegate {
+        MainActivityView {
 
-    override fun onTapCategoryProgramItem(programId: String, categoryId: String) {
-        startActivity(ProgramDetailActivity.newIntentCategoryProgram(applicationContext, programId, categoryId))
-    }
+    private lateinit var mPresenter: MainActivityPresenter
 
-    override fun onTapCurrentProgram() {
-        startActivity(ProgramDetailActivity.newIntentCurrentProgram(applicationContext))
-    }
-
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, MediatorFragment.newInstance())
-                        .commit()
-                return@OnNavigationItemSelectedListener true
+    private val mOnNavigationItemSelectedListener =
+            BottomNavigationView.OnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.navigation_meditate -> {
+                        mPresenter.onTapMediate()
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_me -> {
+                        mPresenter.onTapMe()
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_more -> {
+                        mPresenter.onTapMore()
+                        return@OnNavigationItemSelectedListener true
+                    }
+                }
+                false
             }
-            R.id.navigation_dashboard -> {
-                supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, MeFragment())
-                        .commit()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
-
-    override fun setScreenTitle(title: String) {
-        supportActionBar?.title = title
-    }
-
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+        mPresenter = MainActivityPresenter(this)
+        mPresenter.onCreate()
+
+    }
+
+    override fun showMediateScreen() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, MediatorFragment.newInstance())
-                .commitNow()
-
-        val bool1 = EventBus.getDefault().hasSubscriberForEvent(ApiEvents.ErrorInvokingAPI::class.java)
-        val bool2 = EventBus.getDefault().hasSubscriberForEvent(ApiEvents.SuccessfulDataLoaded::class.java)
+                .commit()
     }
 
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
+    override fun showMeScreen() {
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, MeFragment())
+                .commit()
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onError(event: ApiEvents.ErrorInvokingAPI) {
-        EventBus.getDefault().removeStickyEvent(ApiEvents.ErrorInvokingAPI::class.java)
-        if (event.status == SERVER_CAN_T_CONNECT) {
-            longSnackbar(findViewById(R.id.container)!!, "Can't connect to Server", "Try Again") {
-                SeriesModel.loadSeriesData()
-            }
-        }
+    override fun showMoreScreen() {
+        // Empty for now.
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

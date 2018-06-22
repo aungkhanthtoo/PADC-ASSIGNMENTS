@@ -16,14 +16,12 @@ class CurrentProgramViewHolder(itemView: View, private val mDelegate: CurrentPro
    private val title: TextView = itemView.currentProgramTitle
    private val length: TextView = itemView.currentProgramLength
    private val startText: TextView = itemView.startButton
-    lateinit var currentData: CurrentProgramVO
 
     override fun setData(data: CurrentProgramVO) {
         Glide.with(context).load(getCurrentPic()).into(image)
         title.text = data.title
         length.text = context.resources.getString(R.string.minutes, data.averageLengths[0])
         startText.text = data.currentPeriod
-        currentData = data
     }
 
     override fun onClick(v: View) {

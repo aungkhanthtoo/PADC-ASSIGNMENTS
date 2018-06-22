@@ -1,26 +1,36 @@
 package me.padc.aungkhanthtoo.series.data.vo
 
+import android.arch.persistence.room.*
 import com.google.gson.annotations.SerializedName
+import me.padc.aungkhanthtoo.series.data.persistence.converters.AverageLengthConverter
 
+@Entity(tableName = "Programs",
+        indices = [(Index(value = ["program-id"], unique = true))])
+@TypeConverters(AverageLengthConverter::class)
 
-data class ProgramVO (
+data class ProgramVO(
 
-    @SerializedName("program-id")
-    val programId: String,
+        @PrimaryKey(autoGenerate = true)
+        val id: Int,
 
-    @SerializedName("title")
-    val title: String,
+        @ColumnInfo(name = "program-id")
+        @SerializedName("program-id")
+        val programId: String,
 
-    @SerializedName("image")
-    val image: String,
+        @SerializedName("title")
+        val title: String,
 
-    @SerializedName("average-lengths")
-    val averageLengths: List<Int>,
+        @SerializedName("image")
+        val image: String,
 
-    @SerializedName("description")
-    val description: String,
+        @SerializedName("average-lengths")
+        val averageLengths: List<Int>,
 
-    @SerializedName("sessions")
-    val sessions: List<SessionVO>
+        @SerializedName("description")
+        val description: String,
 
-): BaseVO()
+        @Ignore
+        @SerializedName("sessions")
+        val sessions: List<SessionVO>
+
+) : BaseVO()
