@@ -16,7 +16,11 @@ import org.greenrobot.eventbus.ThreadMode
 object SeriesModel {
 
     private var mPageIndex = 1
+
     val mDataSource: MutableList<BaseVO> by lazy { ArrayList<BaseVO>() }
+
+    val isEmpty
+        get() = mDataSource.isEmpty()
 
     init {
         EventBus.getDefault().register(this)

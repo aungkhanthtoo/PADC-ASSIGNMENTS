@@ -36,7 +36,7 @@ class ProgramDetailActivity : AppCompatActivity(), SeriesDetailView {
         ViewCompat.setTransitionName(image, SHARED_IMAGE_NAME)
 
         val dataType = intent.getIntExtra(EXTRA_TYPE, -1)
-        check(dataType != -1) { "Start ProgramDetailActivity using static factory methods." }
+        check(dataType != -1) { "Start ProgramDetailActivity using only static factory methods." }
 
         mPresenter = SeriesDetailPresenter(this)
         mPresenter.onLoadDetailsData(dataType,

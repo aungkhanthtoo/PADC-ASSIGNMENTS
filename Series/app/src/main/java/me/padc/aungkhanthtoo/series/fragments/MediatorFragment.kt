@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ class MediatorFragment : BaseFragment(){
         arguments?.let {
 
         }
+        d("lif :MediatorFragment", "onCreate")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +46,18 @@ class MediatorFragment : BaseFragment(){
 
         view.tabLayout.setupWithViewPager(view.viewPager)
         view.tabLayout.getTabAt(1)?.select()
-
+        d("lif :MediatorFragment", "onCreateView")
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        d("lif :MediatorFragment", "onDestroy")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        d("lif :MediatorFragment", "onDestroyView")
     }
 
     override fun onStart() {

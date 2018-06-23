@@ -13,9 +13,10 @@ import org.greenrobot.eventbus.ThreadMode
 class SeriesListPresenter(view: SeriesListView) : BasePresenter<SeriesListView>(view),
         CurrentProgramDelegate, CategoryProgramDelegate {
 
-    override fun onCreate() {
-        super.onCreate()
+    fun onLoadSeriesData() = if (SeriesModel.isEmpty) {
         SeriesModel.loadSeriesData()
+    } else {
+        view.showSeriesList(SeriesModel.mDataSource)
     }
 
     override fun onStart() {
@@ -28,6 +29,14 @@ class SeriesListPresenter(view: SeriesListView) : BasePresenter<SeriesListView>(
         EventBus.getDefault().unregister(this)
     }
 
+    override fun onTapCurrentProgram() {
+        view.showCurrentProgramDetail()
+    }
+
+    override fun onTapCategoryProgramItem(programId: String, categoryId: String) {
+        view.showCategoryProgramDetail(programId, categoryId)
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     fun onDataLoaded(event: ApiEvents.SuccessfulDataLoaded) {
         view.showSeriesList(event.newData)
@@ -38,20 +47,6 @@ class SeriesListPresenter(view: SeriesListView) : BasePresenter<SeriesListView>(
         EventBus.getDefault().removeStickyEvent(ApiEvents.ErrorInvokingAPI::class.java)
         if (event.status == SERVER_CAN_T_CONNECT) {
             view.showErrorMsg(event.message)
-        }
-    }
-
-    override fun onTapCurrentProgram() {
-        view.showCurrentProgramDetail()
-    }
-
-    override fun onTapCategoryProgramItem(programId: String, categoryId: String) {
-        view.showCategoryProgramDetail(programId, categoryId)
-    }
-
-    fun onLoadPersistenceData(emptyAdapter: Boolean) {
-        if (emptyAdapter && SeriesModel.mDataSource.isNotEmpty()) {
-            view.showSeriesList(SeriesModel.mDataSource)
         }
     }
 

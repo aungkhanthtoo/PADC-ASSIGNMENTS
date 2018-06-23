@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.fragment_series.view.*
 import me.padc.aungkhanthtoo.series.R
 import me.padc.aungkhanthtoo.series.activities.ProgramDetailActivity
 import me.padc.aungkhanthtoo.series.adapters.SeriesAdapter
-import me.padc.aungkhanthtoo.series.data.SeriesModel
 import me.padc.aungkhanthtoo.series.data.vo.BaseVO
 import me.padc.aungkhanthtoo.series.mvp.presenters.SeriesListPresenter
 import me.padc.aungkhanthtoo.series.mvp.views.SeriesListView
@@ -26,19 +25,21 @@ class SeriesFragment : BaseFragment(), SeriesListView {
 
     private var param1: String? = null
     private var param2: String? = null
+
     private lateinit var mPresenter: SeriesListPresenter
+
     private lateinit var rvSeries: RecyclerView
+
     private val mAdapter by lazy { SeriesAdapter(mPresenter) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mPresenter = SeriesListPresenter(this)
-        mPresenter.onCreate()
-
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        mPresenter = SeriesListPresenter(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +53,19 @@ class SeriesFragment : BaseFragment(), SeriesListView {
             hasFixedSize()
         }
 
+        mPresenter.onLoadSeriesData()
+
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mPresenter.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mPresenter.onStop()
     }
 
     override fun showSeriesList(data: List<BaseVO>) {
@@ -61,7 +74,7 @@ class SeriesFragment : BaseFragment(), SeriesListView {
 
     override fun showErrorMsg(msg: String) {
         longSnackbar(rvSeries, msg, "Try Again") {
-            SeriesModel.loadSeriesData()
+            mPresenter.onLoadSeriesData()
         }
     }
 
@@ -71,17 +84,6 @@ class SeriesFragment : BaseFragment(), SeriesListView {
 
     override fun showCategoryProgramDetail(programId: String, categoryId: String) {
         startActivity(ProgramDetailActivity.newIntentCategoryProgram(context!!, programId, categoryId))
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mPresenter.onStart()
-        mPresenter.onLoadPersistenceData(mAdapter.getItems().isEmpty())
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mPresenter.onStop()
     }
 
     companion object {

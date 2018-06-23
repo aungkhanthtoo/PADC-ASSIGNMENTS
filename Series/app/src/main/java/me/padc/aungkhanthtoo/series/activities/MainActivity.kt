@@ -3,6 +3,7 @@ package me.padc.aungkhanthtoo.series.activities
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.content.ContextCompat.startActivity
+import android.util.Log.d
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_main.*
 import me.padc.aungkhanthtoo.series.fragments.MediatorFragment
@@ -53,6 +54,7 @@ class MainActivity : BaseActivity(),
         mPresenter = MainActivityPresenter(this)
         mPresenter.onCreate()
 
+        d("lif :MainActivity", "onCreate")
     }
 
     override fun showMediateScreen() {
